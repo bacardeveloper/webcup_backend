@@ -1,0 +1,39 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environnement local
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Coverage
+coverage/
+
+# Build outputs
+dist/
+build/
+
+# IDEs et éditeurs
+.vscode/
+.idea/
+*.sw?
+*.sublime-workspace
+*.sublime-project
+
+# Docker
+docker-compose.override.yml
+
+# Supabase (si tu utilises l'auto-hébergement avec volumes Docker)
+supabase/.temp/
+supabase/docker/volumes/
