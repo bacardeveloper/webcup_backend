@@ -1,19 +1,11 @@
-const { initializeApp } = require("firebase/app");
-const { getAI, getGenerativeModel, GoogleAIBackend } = require("firebase/ai");
+const OpenAI = require("openai");
+const EnvConfig = require("../config/env.config");
 
-// Your Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCPI7RcMk9eDcQwT3sw15JO3Wc2S8JUfxo",
-  authDomain: "ai-project-dart.firebaseapp.com",
-  projectId: "ai-project-dart",
-  storageBucket: "ai-project-dart.firebasestorage.app",
-  messagingSenderId: "136195615543",
-  appId: "1:136195615543:web:2b7cbd70f7d0975728c8b2",
-};
-
-const firebaseApp = initializeApp(firebaseConfig);
-const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
-const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+// Configuration OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.API_KEY_OPENAI,
+  // Utilise la variable d'environnement
+});
 
 async function findAffinityCouple(specieUser, speciesList) {
   const prompt = `Voici une liste d'espèces/entités avec leurs caractéristiques :
@@ -44,13 +36,36 @@ FORMAT DE RÉPONSE OBLIGATOIRE :
 Renvoie UNIQUEMENT le JSON array, aucun autre texte, aucune explication, aucun formatage markdown.`;
 
   try {
-    const result = await model.generateContent(prompt);
-    
-    const response = result.response;
-    const text = response.text();
+    console.log("🤖 Tentative avec OpenAI GPT");
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Tu es un expert en matching d'espèces fantasy. Tu réponds UNIQUEMENT en format JSON array sans aucun autre texte.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      max_tokens: 100,
+      temperature: 0.7,
+    });
+
+    let text = response.choices[0].message.content.trim();
     console.log(
       `Matching pour "${specieUser.specie || specieUser.species}": ${text}`
     );
+
+    // Nettoyer et extraire le JSON
+    text = text
+      .replace(/```json\n?/g, "")
+      .replace(/\n?```/g, "")
+      .trim();
+    text = text.replace(/^.*?(\[.*?\]).*$/s, "$1");
 
     // Fallback au cas où l'IA retourne quand même vide
     if (text.trim() === "[]" || !text.includes("[")) {

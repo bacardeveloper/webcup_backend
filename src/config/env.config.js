@@ -9,6 +9,7 @@ class EnvConfig {
   static get_jwt_token = () => jwt_token;
   static get_supabase_url = () => supabase_url;
   static get_supabase_anon_key = () => supabase_anon_key;
+
 }
 
 module.exports = EnvConfig;
