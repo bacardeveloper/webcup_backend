@@ -7,7 +7,10 @@ const isEmpty = (value) =>
   !value || typeof value !== "string" || value.trim() === "";
 
 const signupUser = async (req, res) => {
-  const { email, password, name, status } = req.body;
+  const { email, password, name, status, atmosphere, species, objectif } =
+    req.body;
+
+  console.log(req.body);
 
   // Vérification des champs requis
   if (isEmpty(email) || isEmpty(password) || isEmpty(name) || isEmpty(status)) {
@@ -35,6 +38,8 @@ const signupUser = async (req, res) => {
       email: email,
       password: hashedPassword,
       status: status,
+      atmosphere: atmosphere,
+      objectif: objectif,
     });
 
     let addUser = await UserService.addUser(newUser);

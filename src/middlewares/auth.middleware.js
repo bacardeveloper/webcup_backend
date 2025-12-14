@@ -34,6 +34,8 @@ class Authentification {
       delete decodedToken.iat;
       delete decodedToken.exp;
 
+      req.userData = decodedToken;
+
       // appel de next() pour passer middleware suivant
       next();
     } catch (err) {
