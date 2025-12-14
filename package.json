@@ -9,7 +9,8 @@
     "express": "^5.1.0",
     "firebase": "^12.6.0",
     "jsonwebtoken": "^9.0.2",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "openai": "^6.10.0"
   },
   "name": "backend_boulou",
   "version": "1.0.0",
